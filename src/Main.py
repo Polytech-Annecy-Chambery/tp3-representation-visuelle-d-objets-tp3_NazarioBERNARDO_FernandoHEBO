@@ -16,7 +16,7 @@ import copy
 
 
 def Q1a():
-    pass
+
     return Configuration()
     
 def Q1b_f():
