@@ -33,7 +33,7 @@ class Section:
         if 'color' not in self.parameters:
             self.parameters['color'] = [0.5, 0.5, 0.5]       
         if 'edges' not in self.parameters:
-            self.parameters['edges'] = False             
+            self.parameters['edges'] = True             
             
         # Objects list
         self.objects = []
@@ -67,30 +67,56 @@ class Section:
         self.faces = [
                 # définir ici les faces
                 [0, 3, 2, 1],
-                [0, 3, 4, 6],
+                [0, 3, 6, 4],
                 [2, 3, 6, 7],
                 [6, 7, 5, 4],
                 [1, 2, 7, 5],
-                [1, 0, 5, 4]
+                [1, 0, 4, 5]
                 ]   
 
     # Checks if the opening can be created for the object x
     def canCreateOpening(self, x):
         # A compléter en remplaçant pass par votre code
-        pass      
+        return (self.parameters['width']>x.parameters['width']+x.parameters['position'][0] and self.parameters['height']>x.parameters['height']+x.parameters['position'][2])
+          
         
     # Creates the new sections for the object x
     def createNewSections(self, x):
         # A compléter en remplaçant pass par votre code
-        pass              
+
+        section1 = Section({self.parameters['position'][0]-x.parameters['position'][0], self.parameters['height']})
+        section2 = Section({x.parameters['width'], self.parameters['height']-(x.parameters['position'][2]+x.parameters['height'])})  
+        section3 = Section({x.parameters['width'], x.parameters['position'][2]-self.parameters['position'][2]})      
+        section4 = Section({self.parameters['width']-(x.parameters['width']+x.parameters['position'][0]),self.parameters['height']})
+
+        liste_sections = []
+        liste_sections.append(section1)
+        return liste_sections
+            
         
     # Draws the edges
     def drawEdges(self):
         # A compléter en remplaçant pass par votre code
-        pass           
-                    
+        gl.glPolygonMode(gl.GL_FRONT_AND_BACK,gl.GL_LINE)
+        gl.glPushMatrix()
+        gl.glBegin(gl.GL_QUADS) # Tracé d’un quadrilatère
+        gl.glColor3fv([0.5, 0.5, 0.5]) # Couleur gris moyen
+        gl.glVertex3fv(self.vertices[self.faces[i][0]])
+        gl.glVertex3fv(self.vertices[self.faces[i][1]])
+
+        gl.glEnd()
+        gl.glPopMatrix()
     # Draws the faces
     def draw(self):
         # A compléter en remplaçant pass par votre code
-        pass
-  
+       for i in range (0,len(self.faces)-1):
+          gl.glPolygonMode(gl.GL_FRONT_AND_BACK, gl.GL_FILL) # on trace les faces : GL_FILL
+          gl.glPushMatrix()
+          gl.glBegin(gl.GL_QUADS) # Tracé d’un quadrilatère
+          gl.glColor3fv([0.5, 0.5, 0.5]) # Couleur gris moyen
+          gl.glVertex3fv(self.vertices[self.faces[i][0]])
+          gl.glVertex3fv(self.vertices[self.faces[i][1]])
+          gl.glVertex3fv(self.vertices[self.faces[i][2]])
+          gl.glVertex3fv(self.vertices[self.faces[i][3]])
+          gl.glEnd()
+          gl.glPopMatrix()

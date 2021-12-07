@@ -48,12 +48,37 @@ class Opening:
     def generate(self):
         self.vertices = [ 
                 # Définir ici les sommets
+                [0, 0, 0 ], 
+                [0, 0, self.parameters['height']], 
+                [self.parameters['width'], 0, self.parameters['height']],
+                [self.parameters['width'], 0, 0],      
+                [0, self.parameters['thickness'], 0],
+                [0, self.parameters['thickness'],  self.parameters['height']],
+                [self.parameters['width'], self.parameters['thickness'], 0],
+                [self.parameters['width'], self.parameters['thickness'], self.parameters['height']],
                 ]
+
         self.faces = [
                 # définir ici les faces
-                ]   
+                [0, 3, 2, 1],
+                [0, 3, 6, 4],
+                [2, 3, 6, 7],
+                [6, 7, 5, 4],
+                [1, 2, 7, 5],
+                [1, 0, 4, 5]
+                ]  
         
     # Draws the faces                
     def draw(self):        
         # A compléter en remplaçant pass par votre code
-        pass
+       for i in range (0,len(self.faces)-1):
+          gl.glPolygonMode(gl.GL_FRONT_AND_BACK, gl.GL_LINE) # on trace les faces : GL_FILL
+          gl.glPushMatrix()
+          gl.glTranslatef(self.parameters['position'][0], self.parameters['position'][1], self.parameters['position'][2])
+          gl.glBegin(gl.GL_QUADS) # Tracé d’un quadrilatère
+          gl.glVertex3fv(self.vertices[self.faces[i][0]])
+          gl.glVertex3fv(self.vertices[self.faces[i][1]])
+          gl.glVertex3fv(self.vertices[self.faces[i][2]])
+          gl.glVertex3fv(self.vertices[self.faces[i][3]])
+          gl.glEnd()
+          gl.glPopMatrix()

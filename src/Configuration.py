@@ -64,7 +64,12 @@ class Configuration:
 
         # Clears the buffers and sets DEPTH_TEST to remove hidden surfaces
         gl.glClear(gl.GL_COLOR_BUFFER_BIT|gl.GL_DEPTH_BUFFER_BIT)                  
-        gl.glEnable(gl.GL_DEPTH_TEST)   
+        gl.glEnable(gl.GL_DEPTH_TEST)
+
+
+
+        
+
         
     # Initializes the tranformation matrix    
     def initializeTransformationMatrix(self):     
@@ -142,6 +147,18 @@ class Configuration:
             gl.glRotate(-2.5, 0, 0, 1)                     
         elif self.event.dict['unicode'] == 'z' or self.event.key == pygame.K_z:
             gl.glRotate(2.5, 0, 0, 1) 
+
+        # Rotates around the x-axis                       
+        if self.event.dict['unicode'] == 'X' or (self.event.mod & pygame.KMOD_SHIFT and self.event.key == pygame.K_x):
+            gl.glRotate(-2.5, 1, 0, 0)                     
+        elif self.event.dict['unicode'] == 'x' or self.event.key == pygame.K_x:
+            gl.glRotate(2.5, 1, 0, 0) 
+
+        # Rotates around the y-axis                       
+        if self.event.dict['unicode'] == 'Y' or (self.event.mod & pygame.KMOD_SHIFT and self.event.key == pygame.K_y):
+            gl.glRotate(-2.5, 0, 1, 0)                     
+        elif self.event.dict['unicode'] == 'y' or self.event.key == pygame.K_y:
+            gl.glRotate(2.5, 0, 1, 0) 
         
         # Draws or suppresses the reference frame
         elif self.event.dict['unicode'] == 'a' or self.event.key == pygame.K_a:
@@ -161,16 +178,11 @@ class Configuration:
     # Processes the MOUSEMOTION event
     def processMouseMotionEvent(self):
         if pygame.mouse.get_pressed()[0] == 1:
-            if self.event.rel[0] == 1:
-                gl.glTranslatef(1.0,0.0,0.0)
-            elif self.event.rel[1] == 1:
-                gl.glTranslatef(-1.0,0.0,-1.0)
+            gl.glTranslatef(self.event.rel[0]/50,0,0)
+            gl.glTranslatef(0,0,-self.event.rel[1]/50)
         if pygame.mouse.get_pressed()[2] == 1:
-            if self.event.rel[0] == 1:
-                gl.glRotate(2.5, 1.0, 0.0, 1.0)
-            elif self.event.rel[1] == 1:
-                gl.glRotate(-2.5, 1.0, 0.0, -1.0)
-          
+            gl.glRotatef(self.event.rel[0],0,0,1)
+            gl.glRotatef(self.event.rel[1], 1, 0, 0)
         
          
     # Displays on screen and processes events    
@@ -210,5 +222,3 @@ class Configuration:
             self.draw()
             pygame.event.clear()
             pygame.display.flip()
-            
-
