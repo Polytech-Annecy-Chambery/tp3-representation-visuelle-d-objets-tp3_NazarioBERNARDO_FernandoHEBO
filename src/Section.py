@@ -91,6 +91,9 @@ class Section:
 
         liste_sections = []
         liste_sections.append(section1)
+        liste_sections.append(section2)
+        liste_sections.append(section3)
+        liste_sections.append(section4)
         return liste_sections
             
         
